@@ -7,6 +7,7 @@ import { useTexture } from '@react-three/drei';
 import * as THREE from 'three';
 import starVertexShader from '../shaders/starVertex.glsl?raw';
 import starFragmentShader from '../shaders/starFragment.glsl?raw';
+import { getAssetPath } from '../utils/assetPath';
 
 const StarMaterial = ({ texture, color, emissiveIntensity, isSun }) => {
     const map = useTexture(texture);
@@ -66,7 +67,7 @@ const SolarSystem = forwardRef(({ system, onPlanetSelect, selectedPlanet, useRea
                     <sphereGeometry args={[system.star.size, 32, 32]} />
                     <StarMaterial
                         key={`${system.id}-star`}
-                        texture={system.star.texture || '/textures/sun.png'}
+                        texture={system.star.texture || getAssetPath('textures/sun.png')}
                         color={system.star.color}
                         emissiveIntensity={system.star.emissiveIntensity}
                         isSun={isSun}

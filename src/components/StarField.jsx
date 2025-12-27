@@ -1,6 +1,7 @@
 import { useMemo, useRef } from 'react';
 import * as THREE from 'three';
 import { useTexture } from '@react-three/drei';
+import { getAssetPath } from '../utils/assetPath';
 
 // A small subset of the brightest stars (Magnitude < 4.0)
 // Format: [RA(deg), Dec(deg), Dist(pc), Mag, ColorIndex]
@@ -61,7 +62,7 @@ const BACKGROUND_STARS = generateBackgroundStars(3000);
 
 const StarField = ({ currentSystem }) => {
     const pointsRef = useRef();
-    const sunTexture = useTexture('/textures/sun.png');
+    const sunTexture = useTexture(getAssetPath('textures/sun.png'));
 
     const starPositions = useMemo(() => {
         const allStars = [...BRIGHT_STARS_DATA, ...BACKGROUND_STARS];
@@ -146,7 +147,7 @@ const StarField = ({ currentSystem }) => {
                     depthWrite={false}
                 />
             </points>
-            
+
             {/* Milky Way Band - Simplified as a dense ring of points */}
             <points renderOrder={-2}>
                 <bufferGeometry>

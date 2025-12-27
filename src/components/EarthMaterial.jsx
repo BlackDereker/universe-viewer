@@ -4,17 +4,18 @@ import { useTexture } from '@react-three/drei';
 import * as THREE from 'three';
 import earthVertexShader from '../shaders/earthVertex.glsl?raw';
 import earthFragmentShader from '../shaders/earthFragment.glsl?raw';
+import { getAssetPath } from '../utils/assetPath';
 
 const EarthMaterial = ({ isSelected }) => {
     const materialRef = useRef();
 
     // Load all Earth textures - use HD when selected
     const [dayMap, nightMap, cloudMap, specularMap, normalMap] = useTexture([
-        isSelected ? '/textures/8k_earth_daymap.jpg' : '/textures/2k_earth_daymap.jpg',
-        isSelected ? '/textures/8k_earth_nightmap.jpg' : '/textures/2k_earth_nightmap.jpg',
-        isSelected ? '/textures/8k_earth_clouds.jpg' : '/textures/2k_earth_clouds.jpg',
-        isSelected ? '/textures/8k_earth_specular_map.png' : '/textures/2k_earth_specular_map.png',
-        isSelected ? '/textures/8k_earth_normal_map.png' : '/textures/2k_earth_normal_map.png'
+        getAssetPath(isSelected ? 'textures/8k_earth_daymap.jpg' : 'textures/2k_earth_daymap.jpg'),
+        getAssetPath(isSelected ? 'textures/8k_earth_nightmap.jpg' : 'textures/2k_earth_nightmap.jpg'),
+        getAssetPath(isSelected ? 'textures/8k_earth_clouds.jpg' : 'textures/2k_earth_clouds.jpg'),
+        getAssetPath(isSelected ? 'textures/8k_earth_specular_map.png' : 'textures/2k_earth_specular_map.png'),
+        getAssetPath(isSelected ? 'textures/8k_earth_normal_map.png' : 'textures/2k_earth_normal_map.png')
     ]);
 
     const uniforms = useMemo(() => ({

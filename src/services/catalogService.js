@@ -1,4 +1,6 @@
 // Use static data file to avoid CORS issues on static hosts like GitHub Pages
+import { getAssetPath } from '../utils/assetPath';
+
 const NASA_DATA_URL = import.meta.env.BASE_URL + 'data/exoplanets.csv';
 
 let catalogCache = null;
@@ -336,7 +338,7 @@ export const fetchSystemData = async (hostname) => {
             name: hostname,
             color: getStarColor(first.st_teff),
             size: starSize,
-            texture: '/textures/sun.png',
+            texture: getAssetPath('textures/sun.png'),
             temperature: parseFloat(first.st_teff) || 5778,
             emissiveIntensity: 1.5,
         },
@@ -459,13 +461,15 @@ const getSolarSystemData = () => {
         return {
             name: p.name,
             color: p.color,
-            texture: p.texture,
-            textureHD: p.textureHD, // High-resolution texture for selected/close-up view
+            texture: p.texture ? getAssetPath(p.texture.replace(/^\//, '')) : undefined,
+            textureHD: p.textureHD ? getAssetPath(p.textureHD.replace(/^\//, '')) : undefined,
             rings: p.rings,
             isDwarf: p.isDwarf,
             axialTilt: (p.axialTilt || 0) * (Math.PI / 180), // Convert degrees to radians
             moons: (p.moons || []).map(m => ({
                 ...m,
+                texture: m.texture ? getAssetPath(m.texture.replace(/^\//, '')) : undefined,
+                textureHD: m.textureHD ? getAssetPath(m.textureHD.replace(/^\//, '')) : undefined,
                 size: m.size * 0.15, // Scale moon size relative to planet scale
                 distance: m.distance * size // Scale distance by planet size for precise ratios
             })),
@@ -534,7 +538,7 @@ const getSolarSystemData = () => {
             name: 'Sun',
             color: '#ffffff',
             size: starSize,
-            texture: '/textures/2k_sun.jpg',
+            texture: getAssetPath('textures/2k_sun.jpg'),
             temperature: 5778, // Sun's effective temperature in Kelvin
             emissiveIntensity: 1.5,
         },
