@@ -1,4 +1,5 @@
-const NASA_TAP_URL = 'https://exoplanetarchive.ipac.caltech.edu/TAP/sync?query=select+pl_name,hostname,pl_rade,pl_orbper,pl_orbsmax,st_teff,st_rad,discoverymethod,disc_year,ra,dec,sy_dist+from+pscomppars&format=csv';
+// Use static data file to avoid CORS issues on static hosts like GitHub Pages
+const NASA_DATA_URL = import.meta.env.BASE_URL + 'data/exoplanets.csv';
 
 let catalogCache = null;
 
@@ -24,13 +25,13 @@ export const initCatalog = async () => {
     if (catalogCache) return catalogCache;
 
     try {
-        const response = await fetch(NASA_TAP_URL);
-        if (!response.ok) throw new Error('Failed to fetch NASA Exoplanet Archive');
+        const response = await fetch(NASA_DATA_URL);
+        if (!response.ok) throw new Error('Failed to fetch exoplanet data');
         const text = await response.text();
         catalogCache = parseCSV(text);
         return catalogCache;
     } catch (error) {
-        console.error('Error initializing NASA catalog:', error);
+        console.error('Error initializing exoplanet catalog:', error);
         throw error;
     }
 };
