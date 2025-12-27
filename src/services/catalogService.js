@@ -1,4 +1,4 @@
-const NASA_TAP_URL = '/api/TAP/sync?query=select+pl_name,hostname,pl_rade,pl_orbper,pl_orbsmax,st_teff,st_rad,discoverymethod,disc_year,ra,dec,sy_dist+from+pscomppars&format=csv';
+const NASA_TAP_URL = 'https://exoplanetarchive.ipac.caltech.edu/TAP/sync?query=select+pl_name,hostname,pl_rade,pl_orbper,pl_orbsmax,st_teff,st_rad,discoverymethod,disc_year,ra,dec,sy_dist+from+pscomppars&format=csv';
 
 let catalogCache = null;
 
