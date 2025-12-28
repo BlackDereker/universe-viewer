@@ -102,14 +102,16 @@ const UIOverlay = ({
                 alignItems: 'flex-start',
                 gap: '20px'
             }}>
-                {/* Left: Toolbar */}
-                <Toolbar
-                    activePanel={activePanel}
-                    setActivePanel={setActivePanel}
-                    onOpenGalacticMap={onOpenGalacticMap}
-                    currentSystemName={currentSystem?.name}
-                    onGoHome={() => handleSelectSystem('Solar System')}
-                />
+                {/* Left: Toolbar - fixed width for centering */}
+                <div style={{ flex: '1 1 0', display: 'flex', justifyContent: 'flex-start' }}>
+                    <Toolbar
+                        activePanel={activePanel}
+                        setActivePanel={setActivePanel}
+                        onOpenGalacticMap={onOpenGalacticMap}
+                        currentSystemName={currentSystem?.name}
+                        onGoHome={() => handleSelectSystem('Solar System')}
+                    />
+                </div>
 
                 {/* Center: System Header */}
                 <SystemHeader
@@ -118,8 +120,8 @@ const UIOverlay = ({
                     onToggleFavorite={handleToggleFavorite}
                 />
 
-                {/* Right: Spacer */}
-                <div style={{ width: '180px' }} />
+                {/* Right: Spacer - equal width for centering */}
+                <div style={{ flex: '1 1 0', display: 'flex', justifyContent: 'flex-end' }} />
             </div>
 
             {/* Active Panel - appears below toolbar */}
