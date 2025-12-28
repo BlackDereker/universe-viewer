@@ -38,38 +38,40 @@ const GalacticMapPanel = ({
                 zIndex: 20,
                 pointerEvents: 'none'
             }}>
-                {/* Left: Back button */}
-                <button
-                    onClick={onClose}
-                    style={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: '8px',
-                        background: 'rgba(0, 0, 0, 0.6)',
-                        border: '1px solid rgba(255, 255, 255, 0.15)',
-                        borderRadius: '8px',
-                        padding: '10px 16px',
-                        color: 'white',
-                        fontFamily: 'Inter, sans-serif',
-                        fontSize: '13px',
-                        fontWeight: '500',
-                        cursor: 'pointer',
-                        backdropFilter: 'blur(10px)',
-                        transition: 'all 0.2s ease',
-                        pointerEvents: 'auto'
-                    }}
-                    onMouseEnter={(e) => {
-                        e.target.style.background = 'rgba(255, 255, 255, 0.1)';
-                        e.target.style.borderColor = 'rgba(255, 255, 255, 0.3)';
-                    }}
-                    onMouseLeave={(e) => {
-                        e.target.style.background = 'rgba(0, 0, 0, 0.6)';
-                        e.target.style.borderColor = 'rgba(255, 255, 255, 0.15)';
-                    }}
-                >
-                    <ArrowLeft size={16} />
-                    {t('galacticMap.returnToSystem', { system: translateName(currentSystemName || 'System') })}
-                </button>
+                {/* Left: Back button - fixed width for centering */}
+                <div style={{ flex: '1 1 0', display: 'flex', justifyContent: 'flex-start' }}>
+                    <button
+                        onClick={onClose}
+                        style={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: '8px',
+                            background: 'rgba(0, 0, 0, 0.6)',
+                            border: '1px solid rgba(255, 255, 255, 0.15)',
+                            borderRadius: '8px',
+                            padding: '10px 16px',
+                            color: 'white',
+                            fontFamily: 'Inter, sans-serif',
+                            fontSize: '13px',
+                            fontWeight: '500',
+                            cursor: 'pointer',
+                            backdropFilter: 'blur(10px)',
+                            transition: 'all 0.2s ease',
+                            pointerEvents: 'auto'
+                        }}
+                        onMouseEnter={(e) => {
+                            e.target.style.background = 'rgba(255, 255, 255, 0.1)';
+                            e.target.style.borderColor = 'rgba(255, 255, 255, 0.3)';
+                        }}
+                        onMouseLeave={(e) => {
+                            e.target.style.background = 'rgba(0, 0, 0, 0.6)';
+                            e.target.style.borderColor = 'rgba(255, 255, 255, 0.15)';
+                        }}
+                    >
+                        <ArrowLeft size={16} />
+                        {t('galacticMap.returnToSystem', { system: translateName(currentSystemName || 'System') })}
+                    </button>
+                </div>
 
                 {/* Center: Title */}
                 <div style={{
@@ -103,166 +105,168 @@ const GalacticMapPanel = ({
                     </span>
                 </div>
 
-                {/* Right: Search with Dropdown */}
-                <div style={{
-                    display: 'flex',
-                    flexDirection: 'column',
-                    alignItems: 'flex-end',
-                    gap: '4px',
-                    pointerEvents: 'auto',
-                    position: 'relative'
-                }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                        {showSearch && (
-                            <input
-                                type="text"
-                                placeholder={t('galacticMap.searchSystems')}
-                                value={searchTerm}
-                                onChange={(e) => setSearchTerm(e.target.value)}
-                                autoFocus
-                                style={{
-                                    background: 'rgba(0, 0, 0, 0.6)',
-                                    border: '1px solid rgba(255, 255, 255, 0.2)',
-                                    borderRadius: '8px',
-                                    padding: '10px 14px',
-                                    color: 'white',
-                                    fontFamily: 'Inter, sans-serif',
-                                    fontSize: '13px',
-                                    width: '250px',
-                                    outline: 'none',
-                                    backdropFilter: 'blur(10px)'
-                                }}
-                            />
-                        )}
-                        <button
-                            onClick={() => {
-                                setShowSearch(!showSearch);
-                                if (showSearch) setSearchTerm('');
-                            }}
-                            style={{
-                                display: 'flex',
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                                background: showSearch ? 'rgba(56, 189, 248, 0.2)' : 'rgba(0, 0, 0, 0.6)',
-                                border: '1px solid rgba(255, 255, 255, 0.15)',
-                                borderRadius: '8px',
-                                padding: '10px',
-                                color: 'white',
-                                cursor: 'pointer',
-                                backdropFilter: 'blur(10px)',
-                                transition: 'all 0.2s ease'
-                            }}
-                        >
-                            <Search size={16} />
-                        </button>
-                    </div>
-
-                    {/* Search Results Dropdown */}
-                    {showSearch && searchResults.length > 0 && (
-                        <div style={{
-                            position: 'absolute',
-                            top: '100%',
-                            right: 0,
-                            marginTop: '8px',
-                            background: 'rgba(0, 0, 0, 0.95)',
-                            border: '1px solid rgba(255, 255, 255, 0.15)',
-                            borderRadius: '10px',
-                            overflow: 'hidden',
-                            backdropFilter: 'blur(15px)',
-                            boxShadow: '0 8px 32px rgba(0, 0, 0, 0.5)',
-                            width: '300px',
-                            maxHeight: '400px',
-                            overflowY: 'auto'
-                        }}>
-                            <div style={{
-                                padding: '8px 12px',
-                                fontSize: '10px',
-                                color: 'rgba(255, 255, 255, 0.5)',
-                                borderBottom: '1px solid rgba(255, 255, 255, 0.1)',
-                                letterSpacing: '1px'
-                            }}>
-                                {t('galacticMap.results', { count: searchResults.length })}
-                            </div>
-                            {searchResults.map((system) => (
-                                <div
-                                    key={system.hostname}
-                                    onClick={() => {
-                                        onSelectSystem(system.hostname);
-                                        setSearchTerm('');
-                                        setShowSearch(false);
-                                    }}
+                {/* Right: Search with Dropdown - fixed width for centering */}
+                <div style={{ flex: '1 1 0', display: 'flex', justifyContent: 'flex-end' }}>
+                    <div style={{
+                        display: 'flex',
+                        flexDirection: 'column',
+                        alignItems: 'flex-end',
+                        gap: '4px',
+                        pointerEvents: 'auto',
+                        position: 'relative'
+                    }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                            {showSearch && (
+                                <input
+                                    type="text"
+                                    placeholder={t('galacticMap.searchSystems')}
+                                    value={searchTerm}
+                                    onChange={(e) => setSearchTerm(e.target.value)}
+                                    autoFocus
                                     style={{
-                                        padding: '12px 14px',
-                                        cursor: 'pointer',
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                        gap: '12px',
-                                        borderBottom: '1px solid rgba(255, 255, 255, 0.05)',
-                                        transition: 'background 0.15s ease'
+                                        background: 'rgba(0, 0, 0, 0.6)',
+                                        border: '1px solid rgba(255, 255, 255, 0.2)',
+                                        borderRadius: '8px',
+                                        padding: '10px 14px',
+                                        color: 'white',
+                                        fontFamily: 'Inter, sans-serif',
+                                        fontSize: '13px',
+                                        width: '250px',
+                                        outline: 'none',
+                                        backdropFilter: 'blur(10px)'
                                     }}
-                                    onMouseEnter={(e) => {
-                                        e.currentTarget.style.background = 'rgba(255, 255, 255, 0.08)';
-                                    }}
-                                    onMouseLeave={(e) => {
-                                        e.currentTarget.style.background = 'transparent';
-                                    }}
-                                >
-                                    <span style={{
-                                        color: system.starColor,
-                                        fontSize: '18px',
-                                        textShadow: `0 0 8px ${system.starColor}`
-                                    }}>★</span>
-                                    <div style={{ flex: 1 }}>
-                                        <div style={{
-                                            color: 'white',
-                                            fontFamily: 'Inter, sans-serif',
-                                            fontSize: '13px',
-                                            fontWeight: '500'
-                                        }}>
-                                            {system.hostname}
-                                        </div>
-                                        <div style={{
-                                            color: 'rgba(255, 255, 255, 0.5)',
-                                            fontSize: '10px',
-                                            marginTop: '2px'
-                                        }}>
-                                            {system.starType} • {t('header.planets', { count: system.planetCount })}
-                                        </div>
-                                    </div>
-                                    <div style={{
-                                        color: 'rgba(255, 255, 255, 0.4)',
-                                        fontSize: '10px'
-                                    }}>
-                                        {system.distance.toFixed(0)} pc
-                                    </div>
-                                </div>
-                            ))}
+                                />
+                            )}
+                            <button
+                                onClick={() => {
+                                    setShowSearch(!showSearch);
+                                    if (showSearch) setSearchTerm('');
+                                }}
+                                style={{
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    background: showSearch ? 'rgba(56, 189, 248, 0.2)' : 'rgba(0, 0, 0, 0.6)',
+                                    border: '1px solid rgba(255, 255, 255, 0.15)',
+                                    borderRadius: '8px',
+                                    padding: '10px',
+                                    color: 'white',
+                                    cursor: 'pointer',
+                                    backdropFilter: 'blur(10px)',
+                                    transition: 'all 0.2s ease'
+                                }}
+                            >
+                                <Search size={16} />
+                            </button>
                         </div>
-                    )}
 
-                    {/* No results message */}
-                    {showSearch && searchTerm.length >= 2 && searchResults.length === 0 && (
-                        <div style={{
-                            position: 'absolute',
-                            top: '100%',
-                            right: 0,
-                            marginTop: '8px',
-                            background: 'rgba(0, 0, 0, 0.95)',
-                            border: '1px solid rgba(255, 255, 255, 0.15)',
-                            borderRadius: '10px',
-                            padding: '16px 20px',
-                            backdropFilter: 'blur(15px)',
-                            width: '250px',
-                            textAlign: 'center'
-                        }}>
+                        {/* Search Results Dropdown */}
+                        {showSearch && searchResults.length > 0 && (
                             <div style={{
-                                color: 'rgba(255, 255, 255, 0.5)',
-                                fontSize: '12px'
+                                position: 'absolute',
+                                top: '100%',
+                                right: 0,
+                                marginTop: '8px',
+                                background: 'rgba(0, 0, 0, 0.95)',
+                                border: '1px solid rgba(255, 255, 255, 0.15)',
+                                borderRadius: '10px',
+                                overflow: 'hidden',
+                                backdropFilter: 'blur(15px)',
+                                boxShadow: '0 8px 32px rgba(0, 0, 0, 0.5)',
+                                width: '300px',
+                                maxHeight: '400px',
+                                overflowY: 'auto'
                             }}>
-                                {t('galacticMap.noResults', { term: searchTerm })}
+                                <div style={{
+                                    padding: '8px 12px',
+                                    fontSize: '10px',
+                                    color: 'rgba(255, 255, 255, 0.5)',
+                                    borderBottom: '1px solid rgba(255, 255, 255, 0.1)',
+                                    letterSpacing: '1px'
+                                }}>
+                                    {t('galacticMap.results', { count: searchResults.length })}
+                                </div>
+                                {searchResults.map((system) => (
+                                    <div
+                                        key={system.hostname}
+                                        onClick={() => {
+                                            onSelectSystem(system.hostname);
+                                            setSearchTerm('');
+                                            setShowSearch(false);
+                                        }}
+                                        style={{
+                                            padding: '12px 14px',
+                                            cursor: 'pointer',
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            gap: '12px',
+                                            borderBottom: '1px solid rgba(255, 255, 255, 0.05)',
+                                            transition: 'background 0.15s ease'
+                                        }}
+                                        onMouseEnter={(e) => {
+                                            e.currentTarget.style.background = 'rgba(255, 255, 255, 0.08)';
+                                        }}
+                                        onMouseLeave={(e) => {
+                                            e.currentTarget.style.background = 'transparent';
+                                        }}
+                                    >
+                                        <span style={{
+                                            color: system.starColor,
+                                            fontSize: '18px',
+                                            textShadow: `0 0 8px ${system.starColor}`
+                                        }}>★</span>
+                                        <div style={{ flex: 1 }}>
+                                            <div style={{
+                                                color: 'white',
+                                                fontFamily: 'Inter, sans-serif',
+                                                fontSize: '13px',
+                                                fontWeight: '500'
+                                            }}>
+                                                {system.hostname}
+                                            </div>
+                                            <div style={{
+                                                color: 'rgba(255, 255, 255, 0.5)',
+                                                fontSize: '10px',
+                                                marginTop: '2px'
+                                            }}>
+                                                {system.starType} • {t('header.planets', { count: system.planetCount })}
+                                            </div>
+                                        </div>
+                                        <div style={{
+                                            color: 'rgba(255, 255, 255, 0.4)',
+                                            fontSize: '10px'
+                                        }}>
+                                            {system.distance.toFixed(0)} pc
+                                        </div>
+                                    </div>
+                                ))}
                             </div>
-                        </div>
-                    )}
+                        )}
+
+                        {/* No results message */}
+                        {showSearch && searchTerm.length >= 2 && searchResults.length === 0 && (
+                            <div style={{
+                                position: 'absolute',
+                                top: '100%',
+                                right: 0,
+                                marginTop: '8px',
+                                background: 'rgba(0, 0, 0, 0.95)',
+                                border: '1px solid rgba(255, 255, 255, 0.15)',
+                                borderRadius: '10px',
+                                padding: '16px 20px',
+                                backdropFilter: 'blur(15px)',
+                                width: '250px',
+                                textAlign: 'center'
+                            }}>
+                                <div style={{
+                                    color: 'rgba(255, 255, 255, 0.5)',
+                                    fontSize: '12px'
+                                }}>
+                                    {t('galacticMap.noResults', { term: searchTerm })}
+                                </div>
+                            </div>
+                        )}
+                    </div>
                 </div>
             </div>
 
