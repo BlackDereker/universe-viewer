@@ -1,4 +1,5 @@
-import { Heart } from 'lucide-react';
+import { Heart, Sun } from 'lucide-react';
+import { getSpectralType } from '../../data/starTypes';
 
 const SystemHeader = ({
     currentSystem,
@@ -6,6 +7,8 @@ const SystemHeader = ({
     onToggleFavorite
 }) => {
     if (!currentSystem) return null;
+
+    const spectralType = getSpectralType(currentSystem.star?.temperature);
 
     return (
         <div
@@ -17,34 +20,49 @@ const SystemHeader = ({
                 display: 'flex',
                 alignItems: 'center',
                 gap: '16px',
-                maxWidth: '550px'
+                maxWidth: '600px'
             }}
         >
-            {/* Star indicator */}
+            {/* Star indicator with pulse animation for active stars */}
             <div style={{
-                width: '14px',
-                height: '14px',
+                width: '18px',
+                height: '18px',
                 borderRadius: '50%',
-                background: currentSystem.star?.color || '#ffdd00',
-                boxShadow: `0 0 16px ${currentSystem.star?.color || '#ffdd00'}`,
-                flexShrink: 0
+                background: `radial-gradient(circle, ${spectralType.color} 0%, ${currentSystem.star?.color || spectralType.color} 70%)`,
+                boxShadow: `0 0 20px ${spectralType.color}, 0 0 40px ${spectralType.color}40`,
+                flexShrink: 0,
+                animation: spectralType.surfaceActivity > 0.7 ? 'pulse 2s ease-in-out infinite' : 'none'
             }} />
 
             {/* System info */}
             <div style={{ flex: 1, minWidth: 0 }}>
-                <h2 style={{
-                    fontSize: '18px',
-                    fontWeight: '700',
-                    marginBottom: '2px',
-                    background: 'linear-gradient(135deg, #fff, var(--accent-blue))',
-                    WebkitBackgroundClip: 'text',
-                    WebkitTextFillColor: 'transparent',
-                    whiteSpace: 'nowrap',
-                    overflow: 'hidden',
-                    textOverflow: 'ellipsis'
-                }}>
-                    {currentSystem.name}
-                </h2>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '2px' }}>
+                    <h2 style={{
+                        fontSize: '18px',
+                        fontWeight: '700',
+                        background: 'linear-gradient(135deg, #fff, var(--accent-blue))',
+                        WebkitBackgroundClip: 'text',
+                        WebkitTextFillColor: 'transparent',
+                        whiteSpace: 'nowrap',
+                        overflow: 'hidden',
+                        textOverflow: 'ellipsis'
+                    }}>
+                        {currentSystem.name}
+                    </h2>
+                    {/* Star type badge */}
+                    <span style={{
+                        fontSize: '10px',
+                        fontWeight: '600',
+                        padding: '2px 8px',
+                        borderRadius: '10px',
+                        background: `${spectralType.color}20`,
+                        color: spectralType.color,
+                        border: `1px solid ${spectralType.color}40`,
+                        whiteSpace: 'nowrap'
+                    }}>
+                        {spectralType.name}
+                    </span>
+                </div>
                 <p style={{
                     fontSize: '11px',
                     color: 'var(--text-secondary)',
@@ -53,10 +71,10 @@ const SystemHeader = ({
                     overflow: 'hidden',
                     textOverflow: 'ellipsis'
                 }}>
-                    {currentSystem.planets?.length} planet{currentSystem.planets?.length !== 1 ? 's' : ''}
+                    {spectralType.description}
                     {' • '}
-                    {currentSystem.discoveryYear === 0 ? 'Ancient' : `Discovered ${currentSystem.discoveryYear}`}
-                    {currentSystem.coords?.dist && ` • ${Math.round(currentSystem.coords.dist * 3.26)} ly`}
+                    {currentSystem.planets?.length} planet{currentSystem.planets?.length !== 1 ? 's' : ''}
+                    {currentSystem.star?.temperature && ` • ${Math.round(currentSystem.star.temperature)}K`}
                 </p>
             </div>
 
@@ -79,6 +97,14 @@ const SystemHeader = ({
             >
                 <Heart size={14} fill={isFavorite ? 'currentColor' : 'none'} />
             </button>
+
+            {/* Pulse animation for active stars */}
+            <style>{`
+                @keyframes pulse {
+                    0%, 100% { transform: scale(1); opacity: 1; }
+                    50% { transform: scale(1.15); opacity: 0.8; }
+                }
+            `}</style>
         </div>
     );
 };

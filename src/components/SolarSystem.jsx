@@ -8,19 +8,36 @@ import * as THREE from 'three';
 import starVertexShader from '../shaders/starVertex.glsl?raw';
 import starFragmentShader from '../shaders/starFragment.glsl?raw';
 import { getAssetPath } from '../utils/assetPath';
+import { getSpectralType, getSpectralTypeIndex } from '../data/starTypes';
 
-const StarMaterial = ({ texture, color, emissiveIntensity, isSun }) => {
+const StarMaterial = ({ texture, color, emissiveIntensity, isSun, temperature }) => {
     const map = useTexture(texture);
+    const materialRef = useRef();
+
+    const spectralType = getSpectralType(temperature);
+    const typeIndex = getSpectralTypeIndex(temperature);
 
     const uniforms = useMemo(() => ({
         uMap: { value: map },
         uColor: { value: new THREE.Color(color) },
         uEmissiveIntensity: { value: emissiveIntensity },
-        uIsSun: { value: isSun ? 1.0 : 0.0 }
-    }), [map, color, emissiveIntensity, isSun]);
+        uIsSun: { value: isSun ? 1.0 : 0.0 },
+        uTime: { value: 0 },
+        uSurfaceActivity: { value: spectralType.surfaceActivity },
+        uStarType: { value: typeIndex },
+        uPulsationAmplitude: { value: spectralType.pulsationAmplitude },
+        uPulsationPeriod: { value: spectralType.pulsationPeriod }
+    }), [map, color, emissiveIntensity, isSun, spectralType, typeIndex]);
+
+    useFrame((state) => {
+        if (materialRef.current) {
+            materialRef.current.uniforms.uTime.value = state.clock.getElapsedTime();
+        }
+    });
 
     return (
         <shaderMaterial
+            ref={materialRef}
             uniforms={uniforms}
             vertexShader={starVertexShader}
             fragmentShader={starFragmentShader}
@@ -64,13 +81,14 @@ const SolarSystem = forwardRef(({ system, onPlanetSelect, selectedPlanet, useRea
             {/* Central Star */}
             <group>
                 <mesh ref={sunRef} renderOrder={0}>
-                    <sphereGeometry args={[system.star.size, 32, 32]} />
+                    <sphereGeometry args={[system.star.size, 64, 64]} />
                     <StarMaterial
                         key={`${system.id}-star`}
                         texture={system.star.texture || getAssetPath('textures/sun.png')}
                         color={system.star.color}
                         emissiveIntensity={system.star.emissiveIntensity}
                         isSun={isSun}
+                        temperature={system.star.temperature}
                     />
                 </mesh>
             </group>
