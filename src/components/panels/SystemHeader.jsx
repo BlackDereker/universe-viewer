@@ -1,14 +1,30 @@
-import { Heart, Sun } from 'lucide-react';
+import { Heart } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import { getSpectralType } from '../../data/starTypes';
+import { translateName } from '../../utils/translateNames';
 
 const SystemHeader = ({
     currentSystem,
     isFavorite,
     onToggleFavorite
 }) => {
+    const { t } = useTranslation();
+
     if (!currentSystem) return null;
 
     const spectralType = getSpectralType(currentSystem.star?.temperature);
+
+    // Get translated star type description
+    const getStarDescription = (type) => {
+        const typeKey = type.name.charAt(0).toLowerCase() + 'Type';
+        return t(`stars.${typeKey}`);
+    };
+
+    // Get translated star type name for badge
+    const getStarTypeName = (type) => {
+        const typeKey = type.name.charAt(0).toLowerCase() + 'TypeName';
+        return t(`stars.${typeKey}`);
+    };
 
     return (
         <div
@@ -30,8 +46,7 @@ const SystemHeader = ({
                 borderRadius: '50%',
                 background: `radial-gradient(circle, ${spectralType.color} 0%, ${currentSystem.star?.color || spectralType.color} 70%)`,
                 boxShadow: `0 0 20px ${spectralType.color}, 0 0 40px ${spectralType.color}40`,
-                flexShrink: 0,
-                animation: spectralType.surfaceActivity > 0.7 ? 'pulse 2s ease-in-out infinite' : 'none'
+                flexShrink: 0
             }} />
 
             {/* System info */}
@@ -47,7 +62,7 @@ const SystemHeader = ({
                         overflow: 'hidden',
                         textOverflow: 'ellipsis'
                     }}>
-                        {currentSystem.name}
+                        {translateName(currentSystem.name)}
                     </h2>
                     {/* Star type badge */}
                     <span style={{
@@ -60,7 +75,7 @@ const SystemHeader = ({
                         border: `1px solid ${spectralType.color}40`,
                         whiteSpace: 'nowrap'
                     }}>
-                        {spectralType.name}
+                        {getStarTypeName(spectralType)}
                     </span>
                 </div>
                 <p style={{
@@ -71,9 +86,9 @@ const SystemHeader = ({
                     overflow: 'hidden',
                     textOverflow: 'ellipsis'
                 }}>
-                    {spectralType.description}
+                    {getStarDescription(spectralType)}
                     {' • '}
-                    {currentSystem.planets?.length} planet{currentSystem.planets?.length !== 1 ? 's' : ''}
+                    {t('header.planets', { count: currentSystem.planets?.length || 0 })}
                     {currentSystem.star?.temperature && ` • ${Math.round(currentSystem.star.temperature)}K`}
                 </p>
             </div>
@@ -81,7 +96,7 @@ const SystemHeader = ({
             {/* Favorite button */}
             <button
                 onClick={onToggleFavorite}
-                title={isFavorite ? 'Remove from favorites' : 'Add to favorites'}
+                title={isFavorite ? t('discovery.removeFavorite') : t('discovery.addFavorite')}
                 style={{
                     width: '32px',
                     height: '32px',
@@ -97,14 +112,6 @@ const SystemHeader = ({
             >
                 <Heart size={14} fill={isFavorite ? 'currentColor' : 'none'} />
             </button>
-
-            {/* Pulse animation for active stars */}
-            <style>{`
-                @keyframes pulse {
-                    0%, 100% { transform: scale(1); opacity: 1; }
-                    50% { transform: scale(1.15); opacity: 0.8; }
-                }
-            `}</style>
         </div>
     );
 };

@@ -1,4 +1,5 @@
 import { Play, Pause, Rewind, FastForward, SkipBack, SkipForward, Clock } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import IconButton from '../ui/IconButton';
 
 const TimeControls = ({
@@ -10,6 +11,8 @@ const TimeControls = ({
     setTimeSpeed,
     setStepFrame
 }) => {
+    const { t } = useTranslation();
+
     return (
         <div
             className="glass-morphism"
@@ -29,14 +32,14 @@ const TimeControls = ({
                     onClick={() => { setTimeDirection(-1); setIsPaused(false); }}
                     active={timeDirection === -1 && !isPaused}
                     activeColor="var(--accent-purple)"
-                    title="Rewind"
+                    title={t('time.reverse')}
                     size={32}
                 />
 
                 <IconButton
                     icon={SkipBack}
                     onClick={() => { setTimeDirection(-1); setStepFrame(prev => prev + 1); }}
-                    title="Step Back"
+                    title={t('time.step')}
                     size={32}
                 />
 
@@ -52,14 +55,14 @@ const TimeControls = ({
                     }}
                     active={!isPaused}
                     activeColor="var(--accent-blue)"
-                    title={isPaused ? "Play" : "Pause"}
+                    title={isPaused ? t('time.play') : t('time.pause')}
                     size={40}
                 />
 
                 <IconButton
                     icon={SkipForward}
                     onClick={() => { setTimeDirection(1); setStepFrame(prev => prev + 1); }}
-                    title="Step Forward"
+                    title={t('time.step')}
                     size={32}
                 />
 
@@ -68,7 +71,7 @@ const TimeControls = ({
                     onClick={() => { setTimeDirection(1); setIsPaused(false); }}
                     active={timeDirection === 1 && !isPaused}
                     activeColor="var(--accent-blue)"
-                    title="Fast Forward"
+                    title={t('time.forward')}
                     size={32}
                 />
             </div>

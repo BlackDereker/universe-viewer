@@ -1,5 +1,7 @@
 import { useState, useEffect, useMemo } from 'react';
 import { ArrowLeft, Search, Map, Compass } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
+import { translateName } from '../../utils/translateNames';
 
 const GalacticMapPanel = ({
     onClose,
@@ -9,6 +11,7 @@ const GalacticMapPanel = ({
     systems,
     onSelectSystem
 }) => {
+    const { t } = useTranslation();
     const [showSearch, setShowSearch] = useState(false);
 
     // Filter systems based on search term
@@ -65,7 +68,7 @@ const GalacticMapPanel = ({
                     }}
                 >
                     <ArrowLeft size={16} />
-                    Back to {currentSystemName || 'System'}
+                    {t('galacticMap.returnToSystem', { system: translateName(currentSystemName || 'System') })}
                 </button>
 
                 {/* Center: Title */}
@@ -88,7 +91,7 @@ const GalacticMapPanel = ({
                             fontWeight: '600',
                             letterSpacing: '2px'
                         }}>
-                            GALACTIC MAP
+                            {t('galacticMap.title')}
                         </span>
                     </div>
                     <span style={{
@@ -96,7 +99,7 @@ const GalacticMapPanel = ({
                         color: 'rgba(255, 255, 255, 0.5)',
                         letterSpacing: '1px'
                     }}>
-                        NASA EXOPLANET ARCHIVE
+                        {t('galacticMap.subtitle')}
                     </span>
                 </div>
 
@@ -113,7 +116,7 @@ const GalacticMapPanel = ({
                         {showSearch && (
                             <input
                                 type="text"
-                                placeholder="Search systems..."
+                                placeholder={t('galacticMap.searchSystems')}
                                 value={searchTerm}
                                 onChange={(e) => setSearchTerm(e.target.value)}
                                 autoFocus
@@ -178,7 +181,7 @@ const GalacticMapPanel = ({
                                 borderBottom: '1px solid rgba(255, 255, 255, 0.1)',
                                 letterSpacing: '1px'
                             }}>
-                                {searchResults.length} RESULT{searchResults.length !== 1 ? 'S' : ''}
+                                {t('galacticMap.results', { count: searchResults.length })}
                             </div>
                             {searchResults.map((system) => (
                                 <div
@@ -223,7 +226,7 @@ const GalacticMapPanel = ({
                                             fontSize: '10px',
                                             marginTop: '2px'
                                         }}>
-                                            {system.starType} • {system.planetCount} planet{system.planetCount !== 1 ? 's' : ''}
+                                            {system.starType} • {t('header.planets', { count: system.planetCount })}
                                         </div>
                                     </div>
                                     <div style={{
@@ -256,7 +259,7 @@ const GalacticMapPanel = ({
                                 color: 'rgba(255, 255, 255, 0.5)',
                                 fontSize: '12px'
                             }}>
-                                No systems found matching "{searchTerm}"
+                                {t('galacticMap.noResults', { term: searchTerm })}
                             </div>
                         </div>
                     )}
@@ -280,10 +283,10 @@ const GalacticMapPanel = ({
                 zIndex: 20
             }}>
                 <div style={{ marginBottom: '4px', color: 'rgba(255, 255, 255, 0.8)', fontWeight: '500' }}>
-                    Controls
+                    {t('galacticMap.controls')}
                 </div>
-                <div>🖱️ Drag to rotate • Scroll to zoom</div>
-                <div>👆 Click a star to explore its system</div>
+                <div>🖱️ {t('galacticMap.dragToRotate')}</div>
+                <div>👆 {t('galacticMap.clickStar')}</div>
             </div>
 
             {/* Legend */}
@@ -306,17 +309,17 @@ const GalacticMapPanel = ({
                     fontWeight: '500',
                     fontSize: '11px'
                 }}>
-                    Star Types
+                    {t('galacticMap.starTypes')}
                 </div>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
                     {[
-                        { color: '#ff4400', label: 'M-type (Red Dwarf)' },
-                        { color: '#ffaa00', label: 'K-type (Orange)' },
-                        { color: '#ffdd00', label: 'G-type (Yellow)' },
-                        { color: '#ffffcc', label: 'F-type (White)' },
-                        { color: '#aaccff', label: 'A/B-type (Blue)' }
+                        { color: '#ff4400', key: 'mTypeLabel' },
+                        { color: '#ffaa00', key: 'kTypeLabel' },
+                        { color: '#ffdd00', key: 'gTypeLabel' },
+                        { color: '#ffffcc', key: 'fTypeLabel' },
+                        { color: '#aaccff', key: 'abTypeLabel' }
                     ].map(item => (
-                        <div key={item.label} style={{
+                        <div key={item.key} style={{
                             display: 'flex',
                             alignItems: 'center',
                             gap: '8px',
@@ -327,7 +330,7 @@ const GalacticMapPanel = ({
                                 fontSize: '14px',
                                 textShadow: `0 0 6px ${item.color}`
                             }}>●</span>
-                            {item.label}
+                            {t(`galacticMap.${item.key}`)}
                         </div>
                     ))}
                 </div>

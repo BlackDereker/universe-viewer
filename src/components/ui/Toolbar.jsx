@@ -1,4 +1,6 @@
 import { Search, Settings, Globe2, Map, Home } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
+import LanguageSelector from './LanguageSelector';
 
 const Toolbar = ({
     activePanel,
@@ -7,10 +9,12 @@ const Toolbar = ({
     currentSystemName,
     onGoHome
 }) => {
+    const { t } = useTranslation();
+
     const buttons = [
-        { id: 'discovery', icon: Search, label: 'Discovery', color: '#38bdf8' },
-        { id: 'display', icon: Settings, label: 'Display', color: '#a855f7' },
-        { id: 'planets', icon: Globe2, label: 'Planets', color: '#22c55e' },
+        { id: 'discovery', icon: Search, label: t('toolbar.discovery'), color: '#38bdf8' },
+        { id: 'display', icon: Settings, label: t('toolbar.controls'), color: '#a855f7' },
+        { id: 'planets', icon: Globe2, label: t('toolbar.planets'), color: '#22c55e' },
     ];
 
     const handleClick = (id) => {
@@ -26,6 +30,9 @@ const Toolbar = ({
             gap: '8px',
             pointerEvents: 'auto'
         }}>
+            {/* Language selector */}
+            <LanguageSelector />
+
             {/* Home button - only visible when not in Solar System */}
             {isNotSolarSystem && (
                 <button
@@ -105,7 +112,7 @@ const Toolbar = ({
             {/* Galaxy Map - separate action */}
             <button
                 onClick={onOpenGalacticMap}
-                title="Galaxy Map"
+                title={t('toolbar.galacticMap')}
                 style={{
                     display: 'flex',
                     alignItems: 'center',
@@ -137,4 +144,3 @@ const Toolbar = ({
 };
 
 export default Toolbar;
-

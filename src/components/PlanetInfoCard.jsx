@@ -1,9 +1,11 @@
 import { useState } from 'react';
 import { X, ChevronDown, ChevronUp, ChevronRight, Globe, Thermometer, Wind, Mountain, Rocket, Sparkles, Box, Info } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import { planetDetails } from '../data/planetDetails';
 import AtmosphereVisualizer from './ui/AtmosphereVisualizer';
 import { estimateAtmosphere, getAtmosphereDescription } from '../utils/atmosphereUtils';
 import MissionTimeline from './ui/MissionTimeline';
+import { translateName } from '../utils/translateNames';
 
 const Section = ({ title, icon: Icon, children, defaultOpen = false }) => {
     const [isOpen, setIsOpen] = useState(defaultOpen);
@@ -86,6 +88,7 @@ const AtmosphereBar = ({ composition }) => {
 };
 
 const PlanetInfoCard = ({ planet, selectedMoon, setSelectedMoon, onClose }) => {
+    const { t } = useTranslation();
     const [showVisualizer, setShowVisualizer] = useState(false);
     if (!planet) return null;
 
@@ -115,7 +118,7 @@ const PlanetInfoCard = ({ planet, selectedMoon, setSelectedMoon, onClose }) => {
                 {/* Header */}
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '12px' }}>
                     <div>
-                        <h3 style={{ margin: 0, fontSize: '18px', color: 'white' }}>{object.name}</h3>
+                        <h3 style={{ margin: 0, fontSize: '18px', color: 'white' }}>{translateName(object.name)}</h3>
                         <span style={{
                             display: 'inline-block',
                             marginTop: '4px',
@@ -126,7 +129,7 @@ const PlanetInfoCard = ({ planet, selectedMoon, setSelectedMoon, onClose }) => {
                             background: isMoon ? 'rgba(255, 255, 255, 0.1)' : 'rgba(56, 189, 248, 0.2)',
                             color: isMoon ? 'rgba(255,255,255,0.7)' : '#38bdf8'
                         }}>
-                            {isMoon ? `Moon of ${planet.name}` : (details?.type || (planet.planetType === 'gas' ? 'Gas Giant' : planet.planetType === 'super-earth' ? 'Super-Earth' : 'Rocky Planet'))}
+                            {isMoon ? t('planets.moonOf', { planet: translateName(planet.name) }) : (details?.type || (planet.planetType === 'gas' ? t('planets.gas') : planet.planetType === 'super-earth' ? t('planets.superEarth') : t('planets.rocky')))}
                         </span>
                     </div>
                     <button onClick={() => isMoon ? setSelectedMoon(null) : onClose()} style={{ background: 'none', border: 'none', color: 'rgba(255,255,255,0.6)', cursor: 'pointer', padding: '4px' }}>
@@ -148,34 +151,34 @@ const PlanetInfoCard = ({ planet, selectedMoon, setSelectedMoon, onClose }) => {
                     marginBottom: '12px'
                 }}>
                     <div style={{ background: 'rgba(255,255,255,0.05)', borderRadius: '8px', padding: '8px' }}>
-                        <div style={{ fontSize: '9px', color: 'rgba(255,255,255,0.5)', textTransform: 'uppercase' }}>Diameter</div>
+                        <div style={{ fontSize: '9px', color: 'rgba(255,255,255,0.5)', textTransform: 'uppercase' }}>{t('planets.diameter')}</div>
                         <div style={{ fontSize: '12px', color: 'white', fontWeight: '600' }}>
                             {details?.diameter || (object.size ? `${(object.size * 84946).toLocaleString()} km` : 'Unknown')}
                         </div>
                     </div>
                     <div style={{ background: 'rgba(255,255,255,0.05)', borderRadius: '8px', padding: '8px' }}>
-                        <div style={{ fontSize: '9px', color: 'rgba(255,255,255,0.5)', textTransform: 'uppercase' }}>Type</div>
-                        <div style={{ fontSize: '12px', color: 'white', fontWeight: '600' }}>{details?.type || (planet.planetType || 'Rocky')}</div>
+                        <div style={{ fontSize: '9px', color: 'rgba(255,255,255,0.5)', textTransform: 'uppercase' }}>{t('planets.type')}</div>
+                        <div style={{ fontSize: '12px', color: 'white', fontWeight: '600' }}>{details?.type || (planet.planetType || t('planets.rocky'))}</div>
                     </div>
                     {details ? (
                         <>
                             <div style={{ background: 'rgba(255,255,255,0.05)', borderRadius: '8px', padding: '8px' }}>
-                                <div style={{ fontSize: '9px', color: 'rgba(255,255,255,0.5)', textTransform: 'uppercase' }}>Day Length</div>
+                                <div style={{ fontSize: '9px', color: 'rgba(255,255,255,0.5)', textTransform: 'uppercase' }}>{t('planets.dayLength')}</div>
                                 <div style={{ fontSize: '12px', color: 'white', fontWeight: '600' }}>{details.dayLength}</div>
                             </div>
                             <div style={{ background: 'rgba(255,255,255,0.05)', borderRadius: '8px', padding: '8px' }}>
-                                <div style={{ fontSize: '9px', color: 'rgba(255,255,255,0.5)', textTransform: 'uppercase' }}>Year Length</div>
+                                <div style={{ fontSize: '9px', color: 'rgba(255,255,255,0.5)', textTransform: 'uppercase' }}>{t('planets.yearLength')}</div>
                                 <div style={{ fontSize: '12px', color: 'white', fontWeight: '600' }}>{details.yearLength || 'N/A'}</div>
                             </div>
                         </>
                     ) : (
                         <>
                             <div style={{ background: 'rgba(255,255,255,0.05)', borderRadius: '8px', padding: '8px' }}>
-                                <div style={{ fontSize: '9px', color: 'rgba(255,255,255,0.5)', textTransform: 'uppercase' }}>Temperature</div>
+                                <div style={{ fontSize: '9px', color: 'rgba(255,255,255,0.5)', textTransform: 'uppercase' }}>{t('planets.temperature')}</div>
                                 <div style={{ fontSize: '12px', color: 'white', fontWeight: '600' }}>{Math.round(planet.temperature - 273.15)}°C</div>
                             </div>
                             <div style={{ background: 'rgba(255,255,255,0.05)', borderRadius: '8px', padding: '8px' }}>
-                                <div style={{ fontSize: '9px', color: 'rgba(255,255,255,0.5)', textTransform: 'uppercase' }}>Distance</div>
+                                <div style={{ fontSize: '9px', color: 'rgba(255,255,255,0.5)', textTransform: 'uppercase' }}>{t('planets.distance')}</div>
                                 <div style={{ fontSize: '12px', color: 'white', fontWeight: '600' }}>{object.actualDistance ? `${(object.actualDistance / 50).toFixed(2)} AU` : 'N/A'}</div>
                             </div>
                         </>
@@ -184,7 +187,7 @@ const PlanetInfoCard = ({ planet, selectedMoon, setSelectedMoon, onClose }) => {
 
                 {/* Temperature */}
                 {details?.avgTemperature && (
-                    <Section title="Temperature" icon={Thermometer} defaultOpen={true}>
+                    <Section title={t('planets.temperature')} icon={Thermometer} defaultOpen={true}>
                         <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                             <span style={{ fontSize: '14px', fontWeight: '600', color: '#ff9f43' }}>
                                 {details.avgTemperature}
@@ -194,7 +197,7 @@ const PlanetInfoCard = ({ planet, selectedMoon, setSelectedMoon, onClose }) => {
                 )}
 
                 {/* Atmosphere */}
-                <Section title="Atmosphere" icon={Wind} defaultOpen={!!estimatedAtm}>
+                <Section title={t('planets.atmosphere')} icon={Wind} defaultOpen={!!estimatedAtm}>
                     <p style={{ margin: '0 0 8px 0' }}>{atmDesc}</p>
                     {estimatedAtm && (
                         <>
@@ -252,7 +255,7 @@ const PlanetInfoCard = ({ planet, selectedMoon, setSelectedMoon, onClose }) => {
 
                 {/* Surface Features */}
                 {details?.surfaceFeatures && (
-                    <Section title="Surface Features" icon={Mountain}>
+                    <Section title={t('planets.surfaceFeatures')} icon={Mountain}>
                         <ul style={{ margin: 0, paddingLeft: '16px' }}>
                             {details.surfaceFeatures.map((feature, i) => (
                                 <li key={i} style={{ marginBottom: '2px' }}>{feature}</li>
@@ -263,7 +266,7 @@ const PlanetInfoCard = ({ planet, selectedMoon, setSelectedMoon, onClose }) => {
 
                 {/* Fun Facts */}
                 {details?.funFacts && (
-                    <Section title="Fun Facts" icon={Sparkles}>
+                    <Section title={t('planets.funFacts')} icon={Sparkles}>
                         <ul style={{ margin: 0, paddingLeft: '16px' }}>
                             {details.funFacts.map((fact, i) => (
                                 <li key={i} style={{ marginBottom: '4px' }}>{fact}</li>
@@ -274,7 +277,7 @@ const PlanetInfoCard = ({ planet, selectedMoon, setSelectedMoon, onClose }) => {
 
                 {/* Missions */}
                 {details?.missions && (
-                    <Section title="Exploration Timeline" icon={Rocket} defaultOpen={true}>
+                    <Section title={t('planets.explorationTimeline')} icon={Rocket} defaultOpen={true}>
                         <MissionTimeline missions={details.missions} />
                     </Section>
                 )}
@@ -288,7 +291,7 @@ const PlanetInfoCard = ({ planet, selectedMoon, setSelectedMoon, onClose }) => {
                         fontSize: '10px',
                         color: 'rgba(255,255,255,0.5)'
                     }}>
-                        <strong>Discovered:</strong> {details?.discoveredBy || object.discoveryYear || 'Ancient times'}
+                        <strong>{t('planets.discovered')}:</strong> {details?.discoveredBy || object.discoveryYear || 'Ancient times'}
                     </div>
                 )}
 
@@ -300,7 +303,7 @@ const PlanetInfoCard = ({ planet, selectedMoon, setSelectedMoon, onClose }) => {
                         borderTop: '1px solid rgba(255,255,255,0.1)'
                     }}>
                         <h4 style={{ margin: '0 0 10px 0', fontSize: '11px', color: 'rgba(255,255,255,0.5)', textTransform: 'uppercase', letterSpacing: '1px' }}>
-                            Moons ({planet.moons.length})
+                            {t('planets.moons')} ({planet.moons.length})
                         </h4>
                         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(1, 1fr)', gap: '6px' }}>
                             {planet.moons.map((moon, i) => (
@@ -325,7 +328,7 @@ const PlanetInfoCard = ({ planet, selectedMoon, setSelectedMoon, onClose }) => {
                                     onMouseOut={(e) => e.currentTarget.style.background = 'rgba(255,255,255,0.03)'}
                                 >
                                     <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: moon.color || '#fff' }} />
-                                    <span style={{ flex: 1 }}>{moon.name}</span>
+                                    <span style={{ flex: 1 }}>{translateName(moon.name)}</span>
                                     <ChevronRight size={12} style={{ opacity: 0.3 }} />
                                 </button>
                             ))}

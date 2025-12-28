@@ -1,16 +1,20 @@
 import { ChevronRight } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import Panel from '../ui/Panel';
+import { translateName } from '../../utils/translateNames';
 
 const PlanetList = ({
     planets,
     selectedPlanet,
     onSelectPlanet
 }) => {
+    const { t } = useTranslation();
+
     if (!planets || planets.length === 0) return null;
 
     return (
         <Panel
-            title={`Planets (${planets.length})`}
+            title={`${t('planets.list')} (${planets.length})`}
             icon={null}
             style={{ width: '100%' }}
             collapsible={false}
@@ -53,7 +57,7 @@ const PlanetList = ({
                             boxShadow: `0 0 6px ${planet.color}`,
                             flexShrink: 0
                         }} />
-                        <span style={{ fontSize: '12px', fontWeight: '500', flex: 1 }}>{planet.name}</span>
+                        <span style={{ fontSize: '12px', fontWeight: '500', flex: 1 }}>{translateName(planet.name)}</span>
                         <ChevronRight size={12} style={{ opacity: 0.4 }} />
                     </button>
                 ))}

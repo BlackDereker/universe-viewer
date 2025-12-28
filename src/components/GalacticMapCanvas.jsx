@@ -2,6 +2,7 @@ import { Canvas } from '@react-three/fiber';
 import { OrbitControls, PerspectiveCamera, Stars } from '@react-three/drei';
 import { EffectComposer, Bloom } from '@react-three/postprocessing';
 import { Suspense, useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import GalacticMap from './GalacticMap';
 import { getAllSystemsForGalacticMap } from '../services/catalogService';
 
@@ -12,6 +13,7 @@ const GalacticMapCanvas = ({
     searchTerm,
     onSystemsLoaded
 }) => {
+    const { t } = useTranslation();
     const [systems, setSystems] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const [hoveredSystem, setHoveredSystem] = useState(null);
@@ -70,7 +72,7 @@ const GalacticMapCanvas = ({
                         borderRadius: '50%'
                     }} />
                     <p style={{ letterSpacing: '2px', fontSize: '12px', fontWeight: '600' }}>
-                        MAPPING THE GALAXY...
+                        {t('galacticMap.mappingGalaxy')}
                     </p>
                     <style>{`
                         .spinning { animation: spin 1s linear infinite; }
@@ -153,7 +155,7 @@ const GalacticMapCanvas = ({
                     fontSize: '11px',
                     letterSpacing: '1px'
                 }}>
-                    {systems.length.toLocaleString()} STAR SYSTEMS
+                    {systems.length.toLocaleString()} {t('galacticMap.starSystems')}
                 </div>
             )}
 
@@ -212,7 +214,7 @@ const GalacticMapCanvas = ({
                             justifyContent: 'space-between',
                             fontSize: '12px'
                         }}>
-                            <span style={{ color: 'rgba(255,255,255,0.5)' }}>Planets</span>
+                            <span style={{ color: 'rgba(255,255,255,0.5)' }}>{t('galacticMap.planets')}</span>
                             <span style={{ fontWeight: 600 }}>
                                 {hoveredSystem.planetCount}
                             </span>
@@ -222,7 +224,7 @@ const GalacticMapCanvas = ({
                             justifyContent: 'space-between',
                             fontSize: '12px'
                         }}>
-                            <span style={{ color: 'rgba(255,255,255,0.5)' }}>Distance</span>
+                            <span style={{ color: 'rgba(255,255,255,0.5)' }}>{t('galacticMap.distance')}</span>
                             <span style={{ fontWeight: 600 }}>
                                 {hoveredSystem.distance.toFixed(1)} pc
                             </span>
@@ -233,7 +235,7 @@ const GalacticMapCanvas = ({
                                 justifyContent: 'space-between',
                                 fontSize: '12px'
                             }}>
-                                <span style={{ color: 'rgba(255,255,255,0.5)' }}>Star Temp</span>
+                                <span style={{ color: 'rgba(255,255,255,0.5)' }}>{t('galacticMap.starTemp')}</span>
                                 <span style={{ fontWeight: 600 }}>
                                     {Math.round(hoveredSystem.starTemp).toLocaleString()} K
                                 </span>
@@ -249,7 +251,7 @@ const GalacticMapCanvas = ({
                         color: 'rgba(255,255,255,0.4)',
                         textAlign: 'center'
                     }}>
-                        Click to explore this system
+                        {t('galacticMap.clickToExplore')}
                     </div>
                 </div>
             )}

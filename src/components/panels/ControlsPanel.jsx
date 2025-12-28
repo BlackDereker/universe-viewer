@@ -1,4 +1,5 @@
 import { Settings, Scale, Map } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import Panel from '../ui/Panel';
 import Toggle from '../ui/Toggle';
 
@@ -13,11 +14,13 @@ const ControlsPanel = ({
     onOpenGalacticMap,
     hideGalaxyMapButton = false
 }) => {
+    const { t } = useTranslation();
+
     return (
-        <Panel title="Display" icon={Settings} style={{ width: '100%' }} collapsible={false}>
+        <Panel title={t('toolbar.controls')} icon={Settings} style={{ width: '100%' }} collapsible={false}>
             <Toggle
-                label={useRealDistances ? 'Real Distances' : 'Compact View'}
-                description="Toggle between compact and real orbital distances"
+                label={useRealDistances ? t('controls.realDistances') : t('controls.compactView')}
+                description=""
                 value={useRealDistances}
                 onChange={setUseRealDistances}
                 color="var(--accent-blue)"
@@ -25,8 +28,8 @@ const ControlsPanel = ({
             />
 
             <Toggle
-                label="Habitable Zone"
-                description="Show the Goldilocks zone where liquid water could exist"
+                label={t('controls.habitableZone')}
+                description=""
                 value={showHabitableZone}
                 onChange={setShowHabitableZone}
                 color="#22ff88"
@@ -34,8 +37,8 @@ const ControlsPanel = ({
             />
 
             <Toggle
-                label="Orbit Lines"
-                description="Show circular orbital paths"
+                label={t('controls.orbitLines')}
+                description=""
                 value={showOrbitLines}
                 onChange={setShowOrbitLines}
                 color="#a855f7"
@@ -72,7 +75,7 @@ const ControlsPanel = ({
                 }}
             >
                 <Scale size={14} />
-                Compare Planets
+                {t('controls.comparePlanets')}
             </button>
 
             {/* Galaxy Map Button */}
@@ -106,7 +109,7 @@ const ControlsPanel = ({
                     }}
                 >
                     <Map size={14} />
-                    Galaxy Map
+                    {t('toolbar.galacticMap')}
                 </button>
             )}
         </Panel>
@@ -114,4 +117,3 @@ const ControlsPanel = ({
 };
 
 export default ControlsPanel;
-

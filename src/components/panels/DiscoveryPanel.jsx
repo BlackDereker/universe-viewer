@@ -1,5 +1,6 @@
 import { Search, Sparkles, Loader2, Shuffle, Star, Heart } from 'lucide-react';
 import { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import Panel from '../ui/Panel';
 import { searchSystems, getFeaturedSystems, getRandomSystems, getSystemsByStarType, getFavoriteSystems, getFavorites } from '../../services/catalogService';
 
@@ -12,6 +13,7 @@ const starFilters = [
 ];
 
 const DiscoveryPanel = ({ onSelectSystem, isLoading, setIsLoading }) => {
+    const { t } = useTranslation();
     const [searchTerm, setSearchTerm] = useState('');
     const [searchResults, setSearchResults] = useState([]);
     const [browseMode, setBrowseMode] = useState('featured');
@@ -70,13 +72,13 @@ const DiscoveryPanel = ({ onSelectSystem, isLoading, setIsLoading }) => {
     };
 
     return (
-        <Panel title="Discovery" icon={Sparkles} style={{ width: '280px' }} collapsible={false}>
+        <Panel title={t('discovery.title')} icon={Sparkles} style={{ width: '280px' }} collapsible={false}>
             {/* Search Input */}
             <div style={{ position: 'relative', marginBottom: '10px' }}>
                 <Search size={14} style={{ position: 'absolute', left: '10px', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-secondary)' }} />
                 <input
                     type="text"
-                    placeholder="Search NASA exoplanets..."
+                    placeholder={t('discovery.search')}
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
                     style={{
@@ -98,9 +100,9 @@ const DiscoveryPanel = ({ onSelectSystem, isLoading, setIsLoading }) => {
             {/* Filter Tabs */}
             {searchTerm.length === 0 && (
                 <div style={{ display: 'flex', gap: '4px', marginBottom: '10px', flexWrap: 'wrap' }}>
-                    <FilterButton active={browseMode === 'featured'} onClick={() => setBrowseMode('featured')} icon={Star}>Featured</FilterButton>
-                    <FilterButton active={browseMode === 'favorites'} onClick={() => setBrowseMode('favorites')} icon={Heart} color="#ec4899">Favorites</FilterButton>
-                    <FilterButton active={browseMode === 'random'} onClick={handleRandomDiscover} icon={Shuffle} color="var(--accent-purple)">Random</FilterButton>
+                    <FilterButton active={browseMode === 'featured'} onClick={() => setBrowseMode('featured')} icon={Star}>{t('discovery.featured')}</FilterButton>
+                    <FilterButton active={browseMode === 'favorites'} onClick={() => setBrowseMode('favorites')} icon={Heart} color="#ec4899">{t('discovery.favorites')}</FilterButton>
+                    <FilterButton active={browseMode === 'random'} onClick={handleRandomDiscover} icon={Shuffle} color="var(--accent-purple)">{t('discovery.random')}</FilterButton>
                     {starFilters.map(f => (
                         <button
                             key={f.key}
@@ -127,7 +129,12 @@ const DiscoveryPanel = ({ onSelectSystem, isLoading, setIsLoading }) => {
             <div style={{ maxHeight: '200px', overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: '4px' }}>
                 {hasSearched && searchResults.length === 0 && searchTerm.length > 0 && (
                     <p style={{ fontSize: '12px', color: 'var(--text-secondary)', textAlign: 'center', padding: '16px' }}>
-                        No systems found for "{searchTerm}"
+                        {t('discovery.noResults', { term: searchTerm })}
+                    </p>
+                )}
+                {browseMode === 'favorites' && searchResults.length === 0 && !hasSearched && (
+                    <p style={{ fontSize: '12px', color: 'var(--text-secondary)', textAlign: 'center', padding: '16px' }}>
+                        {t('discovery.noFavorites')}
                     </p>
                 )}
                 {searchResults.map(result => (
@@ -166,13 +173,13 @@ const DiscoveryPanel = ({ onSelectSystem, isLoading, setIsLoading }) => {
                                 {result.hostname}
                             </div>
                             <div style={{ fontSize: '10px', color: 'var(--text-secondary)' }}>
-                                {result.planetCount} planet{result.planetCount !== 1 ? 's' : ''} • {result.starType}
+                                {t('header.planets', { count: result.planetCount })} • {result.starType}
                             </div>
                         </div>
                     </button>
                 ))}
             </div>
-        </Panel>
+        </Panel >
     );
 };
 
