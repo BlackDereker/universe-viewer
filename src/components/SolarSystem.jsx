@@ -24,9 +24,7 @@ const StarMaterial = ({ texture, color, emissiveIntensity, isSun, temperature })
         uIsSun: { value: isSun ? 1.0 : 0.0 },
         uTime: { value: 0 },
         uSurfaceActivity: { value: spectralType.surfaceActivity },
-        uStarType: { value: typeIndex },
-        uPulsationAmplitude: { value: spectralType.pulsationAmplitude },
-        uPulsationPeriod: { value: spectralType.pulsationPeriod }
+        uStarType: { value: typeIndex }
     }), [map, color, emissiveIntensity, isSun, spectralType, typeIndex]);
 
     useFrame((state) => {
