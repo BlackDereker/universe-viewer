@@ -87,6 +87,7 @@ const GalacticMapCanvas = ({
                     alpha: false,
                     logarithmicDepthBuffer: true
                 }}
+                onPointerLeave={() => setHoveredSystem(null)}
             >
                 <PerspectiveCamera
                     makeDefault

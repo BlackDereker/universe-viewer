@@ -175,7 +175,8 @@ const GalacticMapPanel = ({
                                 boxShadow: '0 8px 32px rgba(0, 0, 0, 0.5)',
                                 width: '300px',
                                 maxHeight: '400px',
-                                overflowY: 'auto'
+                                overflowY: 'auto',
+                                zIndex: 50
                             }}>
                                 <div style={{
                                     padding: '8px 12px',
@@ -256,7 +257,8 @@ const GalacticMapPanel = ({
                                 padding: '16px 20px',
                                 backdropFilter: 'blur(15px)',
                                 width: '250px',
-                                textAlign: 'center'
+                                textAlign: 'center',
+                                zIndex: 50
                             }}>
                                 <div style={{
                                     color: 'rgba(255, 255, 255, 0.5)',
